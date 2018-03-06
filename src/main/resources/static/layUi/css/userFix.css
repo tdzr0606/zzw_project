@@ -1,0 +1,30 @@
+.layui-body{position:absolute;left:250px;right:0;top:0;bottom:0;z-index:998;width:auto;overflow:hidden;overflow-y:auto;box-sizing:border-box}
+.layui-layout-admin .layui-footer{position:fixed;left:250px;right:0;bottom:0;height:44px;line-height:44px;padding:0 15px;background-color:#eee}
+form input.layui-input[disabled]{background:#f2f2f2;color:#595963!important}
+.layui-table-view thead th{text-align:center;font-weight:bold}
+/*所学专业和从事专业的搜索*/
+.search .layui-input-inline{padding-top:9px;margin-left:10px}
+.search .layui-input{width:300px}
+#SpecialtyList table th,#jobSpecialtyList table th,#Jbody,#Sbody{text-align:center}
+#Sbody tr,#Jbody tr{cursor:pointer}
+/*隐藏表单，并调整内边距，用于添加修改的表单*/
+.layform{padding:10px 40px 10px;display:none}
+/*图片展示层*/
+.photos-w{background-color:rgba(0,0,0,.8) !important}
+.photos-w .layui-layer-close2{right:10px !important;top:5px !important}
+.photos-w .layui-layer-content{padding:20px;position:relative}
+.photos-w .layui-layer-content img{max-width:90%;max-height:100%;position:absolute;top:0;left:0;bottom:0;right:0;margin:auto}
+/*密码框*/
+.pwd input{padding-right:25px;position:relative}
+.pwd .see{position:absolute;top:0;right:7px;line-height:38px;cursor:pointer}
+/*用于通知的blockquote*/
+.notice{margin:10px;background-color:#ffe6eb;font-size:16px;padding-right:30px;position:relative}
+.notice a{color:#01AAED;line-height:1.5}
+.notice .notice-close{position:absolute;top:50%;margin-top:-10px;right:10px;width:20px;height:20px;cursor:pointer}
+.notice .notice-close i{font-size:20px;text-align:center;color:#009688}
+.notice .notice-close i:hover{font-weight: bold;}
+/*textarea的字是提示*/
+.txttip{display: inline-block;float: left;padding: 10px;color: #9898A5;}
+.txttip p{line-height:1.5;}
+.txttip p span.num{font-size:18px;color:#01AAED !important;}
+.txttip p span.maxnum{font-weight: bold;}

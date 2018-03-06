@@ -1,0 +1,48 @@
+<div class="layui-header">
+    <div class="layui-logo"><img src="/static/design/images/bt2.png" width="318"
+                                 height="56"></div>
+    <ul class="layui-nav layui-layout-right" lay-filter="topMenu">
+    ##        <li class="layui-nav-item">
+    ##            <a href="javascript:;"><i class="fa fa-cog"></i>系统设置</a>
+    ##            <dl class="layui-nav-child">
+    ##                <dd><a href="/webAdmin/admin/toPage"><i class="fa fa-user-circle-o"></i>用户管理</a></dd>
+    ##                <dd><a href="/webAdmin/role/toPage"><i class="fa fa-cogs"></i>角色管理</a></dd>
+    ##                <dd><a href="/webAdmin/function/toPage"><i class="fa fa-code"></i>功能管理</a></dd>
+    ##            </dl>
+    ##        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">
+                您好，<i class="item-impt">$!{loginUser.userName}</i>
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a href="javascript:;" id="passModify">修改密码</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item"><a href="javascript:;" id="loginOut">退出</a></li>
+    </ul>
+</div>
+<div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <ul class="layui-nav layui-nav-tree" lay-filter="test" id="leftMainMenu">
+            <li class="layui-nav-item layui-nav-itemed">
+                #foreach($parent in $parentFunction)
+                    <a class="layui-nav-item-first" href="javascript:;"><i class="fa
+                    fa-files-o"></i>$parent.functionName</a>
+                    #foreach($sub in $subFunction)
+                        #if ($sub.parentId == $parent.id)
+                            <dl class="layui-nav-child">
+                                <dd><a href="$sub.url"><i class="fa fa-angle-right"></i>
+                                    $sub.functionName</a></dd>
+                            </dl>
+                        #end
+                    #end
+                #end
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
+

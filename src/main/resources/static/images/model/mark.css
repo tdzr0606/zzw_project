@@ -1,0 +1,96 @@
+body {
+  line-height: 22px;
+  font-size: 14px;
+  font-family: SimSun;
+  text-align: justify;
+}
+@page{size:210mm 297mm;margin:2cm 1.5cm 1.8cm 1.5cm;}
+@page horizontal{size:297mm 210mm;margin:2cm 1.5cm 1.8cm 1.5cm;}
+.horizontalDiv{page: horizontal}
+.nextPage{page-break-after: always;}
+.mainDiv
+{
+    width: 650px;
+    margin: 0 auto;
+}
+.hrMainDiv
+{
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.hrTable {
+    border-top:1px solid #000000;
+    border-left:1px solid #000000;
+    border-bottom:0px;
+    border-right:0px;
+    font-size:14px;
+    width:950px;
+    margin:0 auto;
+}
+.hrTable td {
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-left:0px;
+    border-top:0px;
+    padding: 3px;
+}
+
+.borderTable {
+    width: 100%;
+    border-top:1px solid #000000;
+    border-left:1px solid #000000;
+    border-bottom:0px;
+    border-right:0px;
+}
+.borderTable td {
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-left:0px;
+    border-top:0px;
+    padding: 5px;
+}
+.border2Table {
+    width: 100%;
+    border-top:1px solid #000000;
+    border-left:1px solid #000000;
+}
+.border2Table td {
+    padding: 3px;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+}
+
+.noBorderTable {
+    width: 400px;
+    margin: 0 auto
+}
+
+.noBorderTable td {
+    padding: 5px;
+    padding-top: 25px
+}
+
+.titleFont {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: 40px;
+    text-align: center
+}
+.title2Font {
+    font-size: 24px;
+    line-height: 50px;
+    text-align: center
+}
+
+.subFont {
+    font-size: 20px;
+    line-height: 24px;
+}
+.noticeFont {
+    font-size: 16px;
+    line-height: 24px;
+}
+.smallFont{
+    font-size:12px;line-height:16px
+}

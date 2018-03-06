@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+    #include("/templates/webAdmin/inc/inc_header.vm")
+<body>
+<div class="layui-layout layui-layout-admin">
+    #parse("/templates/webAdmin/inc/inc_menu.vm")
+    <div class="layui-body" style="padding:10px">
+        <div class="breadcrumb">
+            <i class="fa fa-flag"></i>
+            <span><a href="/webAdmin/toIndex">主页</a></span>
+            <span><i class="fa fa-angle-right"></i></span>
+            <span><a href="#">系统设置</a></span>
+            <span><i class="fa fa-angle-right"></i></span>
+            <span><a><cite>用户管理</cite></a></span>
+        </div>
+        <div id="adminMenuBar"> <!--将所有的菜单聚集在一起.一块进行监听-->
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    搜索：
+                    <div class="layui-inline" style="width:70%">
+                        <input class="layui-input" name="key" id="searchKey" aria-required="true"
+                               autocomplete="off"
+                               style="width:100%;">
+                    </div>
+                    <button class="layui-btn" data-method="search">搜索</button>
+                </div>
+                <div class="layui-col-md6">
+                    <div class="layui-btn-group">
+                        <button class="layui-btn" data-method="new">新建</button>
+                        <button class="layui-btn" data-method="modify">修改</button>
+                        <button class="layui-btn" data-method="delete">删除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="layui-hidden" id="adminTable" lay-filter="adminTable"></table>
+    </div>
+</div>
+
+<!-- form 表单 -->
+<form class="layui-form" id="adminForm" style="display:none;padding:10px 40px 10px 0px; ">
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色</label>
+        <div class="layui-input-block">
+            <select id="roleId" name="roleId" lay-verify="required"></select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户名</label>
+        <div class="layui-input-block">
+            <input type="text" name="userName" required lay-verify="required" placeholder="请输入用户名"
+                   aria-required="true" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">登录名</label>
+        <div class="layui-input-block">
+            <input type="text" name="loginName" required lay-verify="required" placeholder="请输入登录名"
+                   aria-required="true" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="password" required lay-verify="required|length6" placeholder="请输入密码"
+                   aria-required="true" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系电话</label>
+        <div class="layui-input-block">
+            <input type="text" name="linkMobile" required lay-verify="required"
+                   placeholder="请输入联系电话"
+                   aria-required="true" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <input type="hidden" name="id" id="id" value="0"/>
+    <input type="hidden" name="actionUrl" id="actionUrl" value=""/>
+    <input type="hidden" name="createTime"/>
+    <input type="hidden" name="updateTime"/>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="adminForm">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="layer.closeAll()">取消</button>
+        </div>
+    </div>
+</form>
+    #include("/templates/webAdmin/inc/inc_foot.vm")
+
+<script type="text/javascript">
+    function getRoleName(roleId)
+    {
+        var roleName = roleId;
+        $.ajax({
+            async: false, //同步
+            url: '/webAdmin/role/info?id='+roleId+'&sessionId='+new Date().getTime(),
+            success: function (json) {
+                if (json.success)
+                {
+                    roleName = json.data.roleName;
+                }
+                else
+                {
+                    roleName =  roleId;
+                }
+            },
+            error: function (json)
+            {
+                roleName =  roleId;
+            }
+        });
+        return roleName;
+    }
+</script>
+
+<script type="text/html" id="role">
+    {{ getRoleName(d.roleId) }}
+</script>
+<script type="text/javascript">
+    layui.use(['element', 'table', 'layer', 'form'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var layer = layui.layer;
+        var form = layui.form;
+        var adminTable = table.render({
+            elem: '#adminTable'
+            , id: 'adminTable'
+            , url: '/webAdmin/admin/list'
+            , cols: [[
+                {checkbox: true, fixed: true}
+                , {field: 'id', title: 'ID', width: 80, sort: true, fixed: true}
+                , {field: 'userName', title: '用户名称', width: 200, sort: true, fixed: true}
+                , {field: 'loginName', title: '登录名', width: 200, sort: true, fixed: true}
+                , {field: 'linkMobile', title: '联系电话', width: 200, sort: true, fixed: true}
+                , {field: 'roleId', title: '角色', width: 200, sort: true,templet:'#role'}
+                , {field: 'createTime', title: '创建时间', width: 120, sort: true}
+            ]]
+            , height: 'full-200'
+            , limit: 40
+            , page: true
+        });
+
+        // 初始化 角色 下拉框
+        function initRole()
+        {
+            $.ajax({
+                async: false, //同步
+                url: '/webAdmin/role/listAll',
+                success: function (json) {
+                    if (json.success)
+                    {
+                        $("#roleId").empty(); //移除所有
+                        $("#roleId").append("<option value=''>请选择角色</option>");
+                        for (var i = 0; i < json.data.length; i++) {
+                            $("#roleId").append("<option value='" + json.data[i].id + "' >" +
+                                                json.data[i].roleName +
+                                                "</option>");
+                        }
+                        form.render('select');
+                    }
+                    else {
+                        layer.msg(json.message);
+                        return;
+                    }
+                },
+                error: function (json) {
+                    layer.alert("未知的错误！", {closeBtn: 0}, function () {
+                        layer.closeAll();
+                    });
+                }
+            });
+        }
+
+        //触发事件
+        var active = {
+            search: function () {
+                var keyValue = $('#searchKey').val();
+                adminTable.reload({where: {key: keyValue}});
+            }
+            , new: function () {
+                $('#adminForm')[0].reset();
+                $('#actionUrl').val("new");
+                $('#id').val('0');
+                initRole();
+                layer.open({
+                    type: 1
+                    , title: "新建"
+                    , closeBtn: 1
+                    , area: '650px;'
+                    , shade: 0.2
+                    , id: 'adminFormWindow'
+                    , moveType: 1
+                    , resize: false
+                    , content: $('#adminForm')
+                });
+            }
+            , modify: function () {
+                var checkStatus = table.checkStatus('adminTable'), data = checkStatus.data;
+                if (data.length < 1) {
+                    layer.msg('您必须选中一条需要修改的记录');
+                    return false;
+                }
+                else if (data.length > 1) {
+                    layer.msg('您在修改的时候,不能选中多条记录');
+                    return false;
+                }
+                else {
+                    var id = data[0].id;
+                    initRole();
+                    $.ajax({
+                        type: 'get',
+                        url: '/webAdmin/admin/info?id=' + id + '&sessionId=' + new Date().getTime(),
+                        success: function (json) {
+                            if (json.success) {
+                                form.loadData(json.data, 'adminForm');
+                                $('#actionUrl').val("modify");
+                                form.render();
+                                layer.open({
+                                    type: 1
+                                    , title: "修改"
+                                    , closeBtn: 1
+                                    , area: '650px;'
+                                    , shade: 0.2
+                                    , id: 'adminFormWindow'
+                                    , moveType: 1
+                                    , resize: false
+                                    , content: $('#adminForm')
+                                    , success: function (layero) {
+                                    }
+                                });
+                            }
+                            else {
+                                layer.msg(json.message);
+                            }
+                        },
+                        error: function (json) {
+                            layer.alert("未知的错误！", {closeBtn: 0}, function () {
+                                layer.closeAll();
+                            });
+                        }
+                    });
+                }
+            }
+            , delete: function () {
+                var checkStatus = table.checkStatus('adminTable'), data = checkStatus.data;
+                if (data.length < 1) {
+                    layer.msg('您必须最少选中一条需要删除的记录');
+                    return false;
+                }
+                layer.open({
+                    type: 1
+                    , id: 'adminDeleteAccept'
+                    , content: '<div style="padding: 20px 30px;">是否真的要删除选中的记录?</div>'
+                    , btn: ['确定', '取消']
+                    , btnAlign: 'c'
+                    , shade: 0.2
+                    , resize: false
+                    , yes: function () {
+                        layer.closeAll();
+                        var idArray = new Array();
+                        for (var i = 0; i < data.length; i++) {
+                            idArray[i] = data[i].id;
+                        }
+                        $.ajax({
+                            type: 'post',
+                            data: {ids: idArray.toString()},
+                            url: '/webAdmin/admin/delete',
+                            success: function (json) {
+                                if (json.success) {
+                                    layer.alert(json.message, {closeBtn: 0}, function () {
+                                        layer.closeAll();
+                                        adminTable.reload();
+                                    });
+                                }
+                                else {
+                                    layer.alert(json.message);
+                                }
+                            },
+                            error: function (json) {
+                                layer.alert("登录超时,请重新登录！", {closeBtn: 0}, function () {
+                                    layer.closeAll();
+                                    window.location.reload();
+                                });
+                            }
+                        });
+                        return false;
+                    }
+                });
+            }
+        };
+        //总体上调用,是那个按钮激活哪个
+        $('#adminMenuBar .layui-btn').on('click', function () {
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+        });
+        //form submit新建修改事件提交
+        form.on('submit(adminForm)', function (data) {
+            var actionUrl = "/webAdmin/admin/" + $('#actionUrl').val();
+            $.ajax({
+                type: 'post',
+                data: $('#adminForm').serialize(),
+                url: actionUrl,
+                success: function (json) {
+                    if (json.success) {
+                        layer.alert(json.message, {closeBtn: 0}, function () {
+                            layer.closeAll();
+                            adminTable.reload();
+                        });
+                    }
+                    else {
+                        layer.alert(json.message);
+                    }
+                },
+                error: function (json) {
+                    layer.alert("登录超时,请重新登录！", {closeBtn: 0}, function () {
+                        layer.closeAll();
+                        window.location.reload();
+                    });
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>

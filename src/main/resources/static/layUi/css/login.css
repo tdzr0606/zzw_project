@@ -1,0 +1,48 @@
+html
+{
+    width: 100%; height: 100%; margin: 0; padding: 0;
+}
+
+body
+{
+    font-family: '黑体', Tahoma, serif, sans-serif, Arial, 'MS Serif'; font-size: 12px;
+
+    position: relative; margin: 0 auto; padding: 0; width: 100%; height: 100%; overflow-x: hidden;
+
+   /*background: url(/layUi/images/login/content_bg.jpg) repeat;*/
+}
+/*This page the max width is 100%*/
+
+/*Format*/
+div,p,span,a,table,tr,td,input,img,form,h1,h2,h3,h4,h5,h6
+{
+    margin: 0; padding: 0;
+}
+ul,li,ol
+{
+    margin: 0; padding: 0; list-style-type: none;
+}
+img
+{
+    border: none;
+}
+
+.TopTitle {width: 912px; height: 120px; position: relative; margin: 0 auto; padding-top: 35px; padding-bottom: 0px;overflow: hidden;border-bottom:0px solid #D2E3EC}
+
+.LoginForm {width: 458px; height: 300px; position: relative; margin: 0 auto; background: url(/layUi/images/login/form_bg.gif) no-repeat; padding-left: 454px; padding-top: 58px;}
+
+.Username {width: 345px; height: 44px; position: relative;}
+.Username i {width: 25px; height: 25px; position: relative; display: block; padding-top: 10px;}
+.Username input {width: 270px; height: 44px; line-height: 44px; position: absolute; top: 0; left: 45px; background: url(/layUi/images/login/form_input1.gif) no-repeat; border: none; outline: none; padding: 0 15px; font-size: 20px; font-weight: bold; color: #1097d0;}
+
+.Password {width: 345px; height: 44px; position: relative; margin-top: 25px;}
+.Password i {width: 25px; height: 25px; position: relative; display: block; padding-top: 10px;}
+.Password input {width: 270px; height: 44px; line-height: 44px; position: absolute; top: 0; left: 45px; background: url(/layUi/images/login/form_input1.gif) no-repeat; border: none; outline: none; padding: 0 15px; font-size: 20px; font-weight: bold; color: #1097d0;}
+
+.codeKey {width: 345px; height: 44px; position: relative; margin-top: 10px;margin-left:40px}
+.codeKey i {width: 125px; height: 30px; position: relative; display: block; padding-top: 10px;}
+.codeKey input {width: 122px; height: 44px; line-height: 44px; position: absolute; top: 0; left: 140px; background: url(/layUi/images/login/form_input3.gif) no-repeat; border: none; outline: none; padding: 0 15px; font-size: 20px; font-weight: bold; color: #1097d0;}
+
+.LoginForm button {width: 300px; height: 56px; background: url(/layUi/images/login/form_btn.gif) no-repeat; border: none; margin-top: 25px; margin-left: 45px; cursor: pointer;}
+
+.Copy {width: 800px; height: auto; padding: 30px 0; position: absolute; left: 50%; margin-left: -400px; text-align: center; bottom: 0; font-size: 12px; font-family: "黑体"; color: #386188; line-height: 20px; text-transform:uppercase}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>档案管理系统</title>
+    <link rel="stylesheet" href="/static/design/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/design/css/ch233.min.css">
+    <link rel="stylesheet" href="/static/design/css/layui.css">
+</head>
+<body class="login_body body-233">
+
+<div class="content-wrapper">
+    <div class="content-tt">
+        <img src="/static/design/images/bt.png">
+    </div>
+    <div class="content-form">
+        <div class="form-wrapper">
+            <div class="form-cover"><img src="/static/design/images/login_cover.png"></div>
+            <div class="form-login-wrapper">
+                <div class="form-tabs-wrapper tabs" id="loginFormContent">
+                    <ul class="form-tabs tabs-tt">
+                        <li><a>用户登录</a></li>
+                    </ul>
+                    <ul class="form-tab-conts tabs-cont">
+                        <form class="layui-form" id="loginForm">
+                            <li class="tab-cont">
+                                <div class="tab-form-cont">
+                                    <div class="input-gp">
+                                        <label for="loginName">登&nbsp;录&nbsp;名</label>
+                                        <input type="text" id="loginName" name="loginName"
+                                               lay-verify="required|length22" value=""
+                                               aria-required="true"
+                                               autocomplete="off">
+                                    </div>
+                                    <div class="input-gp">
+                                        <label for="password">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+                                        <input type="password" id="password" name="password"
+                                               lay-verify="required|pass|length6" value=""
+                                               aria-required="true"
+                                               autocomplete="off">
+                                    </div>
+                                    <div class="input-gp input-check-code">
+                                        <label for="vcode">验&nbsp;证&nbsp;码</label>
+                                        <input type="text" id="vcode" name="loginCode"
+                                               required
+                                               lay-verify="required|length4" aria-required="true"
+                                               autocomplete="off">
+                                        <img src="/vcode?codeKey=$!{vcode}"
+                                             id="imgVcode" style="cursor: pointer;"
+                                             title="点击刷新验证码"/>
+                                    </div>
+                                    <div class="input-gp input-gp-btn">
+                                        <div class="btn btn-green character-13" lay-submit
+                                             lay-filter="loginForm" id="loginBtn">
+                                            <a href="#">提交</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </form>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="login-foo">
+    copyright @2018.档案管理系统
+</div>
+<script src="/static/design/js/jquery-3.2.1.min.js"></script>
+<script src="/static/design/js/ch233.min.js"></script>
+<script src="/static/design/layui.js"></script>
+<script>
+    $(function () {
+
+        $('#imgVcode').click(function () {
+            $('#imgVcode').attr("src","/vcode?codeKey=${vcode}&sessionId="+new Date().getTime());
+        });
+
+        $('#vcode').keyup(function(event){
+            if(event.keyCode == 13)
+            {
+                $('#loginBtn').click();
+            }
+        });
+    });
+
+
+    layui.use(['jquery', 'element', 'form'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var device = layui.device();
+        //form 用户登录
+        form.on('submit(loginForm)', function (data) {
+            var data1 = $("#loginForm").serialize();
+            $.ajax({
+                type: 'post',
+                data: data1,
+                url: '/webAdmin/login',
+                success: function (json) {
+                    console.log(json);
+                    if (json.success) {
+                        layer.closeAll();
+                        window.location.href = "/webAdmin/toIndex";
+                    }
+                    else {
+                        layer.alert(json.message);
+                        $('#imgVcode').attr("src","/vcode?codeKey=$!{vcode}&sessionId="+new Date().getTime());
+                        return false;
+                    }
+                },
+                error: function (json) {
+                    layer.alert("登录超时,请重新登录！", {closeBtn: 0}, function () {
+                        layer.closeAll();
+                        window.location.reload();
+                    });
+                }
+            });
+            return false;
+        });
+        if (device.ie) {
+            var msg = "<div style='text-align: left;font-size:18px;line-height:32px;padding:20px';><font color=#ef0000>为了您更好的体验系统,请您使用以下浏览器</font><br/><ul style='padding-top:20px;padding-left:20px;'>" +
+                      "<li><a target='_blank' href='http://rj.baidu.com/soft/detail/14744.html?ald' class='colorNotice' title='点击下载Google chrome浏览器'>Google 浏览器(推荐下载)</a></li>" +
+                      "<li><a target='_blank' href='http://se.360.cn/' title='点击下载360安全浏览器'>360安全浏览器</a></li>" +
+                      "<li><a target='_blank' href='http://browser.qq.com/' title='点击下载QQ浏览器'>QQ浏览器</a></li>" +
+                      "<li><a target='_blank' href='http://www.firefox.com.cn/download/' title='点击下载FireFox火狐浏览器'>FireFox火狐浏览器</a></li>" +
+                      "<li>Microsoft IE Edge</li>" +
+                      "</ul>" +
+                      "<br/></div>";
+            $('#loginFormContent').html(msg);
+        }
+    });
+</script>
+</body>
+</html>

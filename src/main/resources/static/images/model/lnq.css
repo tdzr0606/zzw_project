@@ -1,0 +1,33 @@
+/*body {
+  line-height: 22px;
+  font-size: 14px;
+  font-family: SimSun;
+  text-align: justify;
+}
+@page{size:210mm 297mm;margin:2cm 1.lnq-5cm 1.lnq-8cm 1.lnq-5cm;}
+.lnq-nextPage{page-break-after: always;}
+.lnq-mainDiv
+{
+    width: 650px;
+    margin: 0 auto;
+}*/
+.lnq-borderTable {
+    width: 100%;
+    border-top:1px solid #e3e3e3;
+    border-left:1px solid #e3e3e3;
+    color: #666;
+    margin-bottom:10px;
+}
+.lnq-borderTable td {
+    border-right: 1px solid #e3e3e3;
+    border-bottom: 1px solid #e3e3e3;
+    padding: 10px;
+}
+.lnq-flowTable {
+    color: #666;
+    margin-bottom:10px;
+}
+.lnq-flowTable td {
+    text-align: center;
+    padding: 5px;
+}

@@ -1,0 +1,25 @@
+<html>
+#include("/templates/webAdmin/inc/inc_header.vm")
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+   #parse("/templates/webAdmin/inc/inc_menu.vm")
+    <div class="layui-body no-foo-body">
+        <div class="default-cont-admin">
+            <p>您好，<i class="admin-impt">$!{loginUser.userName}</i></p>
+            <p>今天是$!{nowDate}，欢迎使用本系统</p>
+        </div>
+        <div class="default-cont-wrapper">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>快捷菜单</legend>
+            </fieldset>
+            <ul class="cont-menu-li cont-menu-li-user">
+                #foreach($elem in $subFunction)
+                    <li><a href="$elem.url"><i class="fa fa-files-o"></i>$elem.functionName</a></li>
+                #end
+            </ul>
+        </div>
+    </div>
+</div>
+#include("/templates/webAdmin/inc/inc_foot.vm")
+</body>
+</html>
