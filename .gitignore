@@ -1,4 +1,4 @@
-.idea/
-logs/
-target/
-fileUpload/
+.idea/*
+logs/*
+target/*
+fileUpload/*
