@@ -26,8 +26,8 @@ public class LoginHandlerInterceptor implements HandlerInterceptor
     {
         logger.info(httpServletRequest.getRemoteAddr() + ":" + httpServletRequest.getRequestURI());
         String requestURI = httpServletRequest.getRequestURI();
-        if(requestURI.equals("/webAdmin/") || requestURI.equals("/webAdmin/login") || requestURI.equals
-                ("/webAdmin/loginOut"))
+        if(requestURI.equals("/webAdmin/") || requestURI.equals("/webAdmin/login") ||
+                requestURI.equals("/webAdmin/loginOut"))
         {
             return true;
         }
