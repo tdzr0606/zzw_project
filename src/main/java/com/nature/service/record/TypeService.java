@@ -25,4 +25,6 @@ public interface TypeService
     public void deleteByIds(String[] ids);
 
     public boolean use(String[] ids);
+
+    public Page<Type> listPublicForPage(Integer nowPage, Integer pageSize, String key);
 }

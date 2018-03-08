@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+    #include("/templates/webAdmin/inc/inc_header.vm")
+<body>
+
+<div class="layui-form-item" style="padding:5px 20px 0px 0px;">
+    <label class="layui-form-label" style="width:150px;">选中档案类型:</label>
+    <div class="layui-input-inline" style="width: 400px;">
+        <input type="text" id="selectValue" class="layui-input" autocomplete="off"
+               readonly="readonly"
+               placeholder="请在下方搜索并选择档案类型">
+    </div>
+</div>
+<hr/>
+<div class="layui-row" style="padding-right: 20px;padding-top: 10px;">
+    <table align="right">
+        <tr>
+            <td style="padding-right:10px">搜索:</td>
+            <td><input class="layui-input" style="height:30px;width:300px;float:right" name="key" id="searchKey" autocomplete="off"></td>
+            <td style="padding-left:10px"><button class="layui-btn layui-btn-sm" data-method="search" type="button" id="searchBtn" style="float:right">搜索</button></td>
+        </tr>
+    </table>
+</div>
+<div class="table-cont">
+    <table class="layui-table" id="typeSelectTable" lay-filter="typeSelectTable"></table>
+</div>
+<script src="/static/design/js/jquery-3.2.1.min.js"></script>
+<script src="/static/design/js/ch233.min.js"></script>
+<script src="/static/design/js/md5.js"></script>
+<script src="/static/design/layui.js"></script>
+
+
+<script type="text/html" id="isPublic">
+    {{#
+    if(d.isPublic)
+    {
+    }}
+    <font color="green">启用</font>
+    {{#
+    }
+    else
+    {
+    }}
+    <font color="red">禁用</font>
+    {{#
+    }
+    }}
+</script>
+<script type="text/javascript">
+    layui.use(['element', 'table', 'layer'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var layer = layui.layer;
+        var typeSelectTable = table.render({
+            elem: '#typeSelectTable'
+            , id: 'typeSelectTable'
+            , url: '/popu/type/list'
+            , cols: [[
+                {checkbox: true, fixed: true}
+                , {field: 'id', title: 'ID', width: 80, sort: true, fixed: true}
+                , {field: 'title', title: '标签名', width: 200, sort: true}
+                , {field: 'note', title: '备注', width: 300, sort: true}
+                , {field: 'isPublic', title: '状态', width: 80, sort: true,templet:'#isPublic'}
+            ]]
+            , height: '360'
+            , limit: 40
+            , page: true
+        });
+
+        table.on('checkbox(typeSelectTable)', function (obj) {
+            $('#selectValue').val(obj.data.title);
+            window.parent.document.returnValue = obj.data;
+        });
+
+
+        $('#searchBtn').on('click',function () {
+            var keyValue = $('#searchKey').val();
+            typeSelectTable.reload({where: {key: keyValue}});
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,7 +1,6 @@
 package com.nature.mapper.record;
 
-import com.nature.mybatis.config.MyMapper;
-import com.nature.pojo.record.Label;
+import com.nature.pojo.record.Record;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -9,16 +8,16 @@ import java.util.List;
 /**
  * zzw_project
  * Author: 竺志伟
- * Date:   2018-03-05 18:55
+ * Date:   2018-03-07 21:24
  */
-public interface LabelMapper extends MyMapper<Label>
+public interface RecordMapper
 {
     /**
      * 查询所有数据
      *
      * @return
      */
-    public List<Label> list(@Param(value = "key") String key);
+    public List<Record> list(@Param(value = "key") String key);
 
 
     /**
@@ -26,14 +25,14 @@ public interface LabelMapper extends MyMapper<Label>
      *
      * @param obj
      */
-    public int add(Label obj);
+    public int add(Record obj);
 
     /**
      * 更新数据
      *
      * @param obj
      */
-    public int modify(Label obj);
+    public int modify(Record obj);
 
 
     /**
@@ -50,7 +49,7 @@ public interface LabelMapper extends MyMapper<Label>
      * @param id
      * @return
      */
-    public Label findById(@Param(value = "id") Integer id);
+    public Record findById(@Param(value = "id") Integer id);
 
 
     /**
@@ -59,19 +58,4 @@ public interface LabelMapper extends MyMapper<Label>
      * @param ids
      */
     public void deleteByIds(@Param(value = "ids") String[] ids);
-
-    /**
-     * 启用/禁用
-     *
-     * @param ids
-     * @return
-     */
-    public int use(@Param(value = "ids") String[] ids);
-
-    /**
-     * 获取已启用列表
-     * @param key
-     * @return
-     */
-    public List<Label> listForPublic(@Param(value = "key") String key);
 }

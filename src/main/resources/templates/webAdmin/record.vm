@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+    #include("/templates/webAdmin/inc/inc_header.vm")
+<body>
+<div class="layui-layout layui-layout-admin">
+    #parse("/templates/webAdmin/inc/inc_menu.vm")
+    <div class="layui-body" style="padding:10px">
+        <div class="breadcrumb">
+            <i class="fa fa-flag"></i>
+            <span><a href="/webAdmin/toIndex">主页</a></span>
+            <span><i class="fa fa-angle-right"></i></span>
+            <span><a href="#">档案管理</a></span>
+            <span><i class="fa fa-angle-right"></i></span>
+            <span><a><cite>档案信息管理</cite></a></span>
+        </div>
+        <div id="recordMenuBar"> <!--将所有的菜单聚集在一起.一块进行监听-->
+            <div class="layui-row">
+                <div class="layui-col-md6">
+                    搜索：
+                    <div class="layui-inline" style="width:70%">
+                        <input class="layui-input" name="key" id="searchKey" aria-required="true"
+                               autocomplete="off"
+                               style="width:100%;">
+                    </div>
+                    <button class="layui-btn" data-method="search">搜索</button>
+                </div>
+                <div class="layui-col-md6">
+                    <div class="layui-btn-group">
+                        <button class="layui-btn" data-method="new">新建</button>
+                        <button class="layui-btn" data-method="modify">修改</button>
+                        <button class="layui-btn" data-method="delete">删除</button>
+                        <button class="layui-btn" data-method="public" title="启用/禁用"><i class="layui-icon">&#x1005;</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="layui-hidden" id="recordTable" lay-filter="recordTable"></table>
+    </div>
+</div>
+
+<!-- form 表单 -->
+<form class="layui-form" id="recordForm" style="display:none;padding:10px 40px 10px 0px; ">
+    <div class="layui-form-item">
+        <label class="layui-form-label">档案名</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" required lay-verify="required" placeholder="请输入档案名"
+                   aria-required="true" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-inline">
+            <input type="text" name="typeTitle" required lay-verify="required" placeholder="请选择类型"
+                   style="width:380px;" id="typeTitle"
+                   aria-required="true" autocomplete="off" class="layui-input" readonly/>
+            <input type="hidden" name="typeId" id="typeId"/>
+        </div>
+        <div class="layui-inline">
+            <span id="typeBtn" style="cursor:pointer" class="layui-btn"><i class="layui-icon">&#xe681;
+            </i>选择
+            </span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">标签</label>
+        <div class="layui-inline">
+            <input type="text" name="labelTitle" required lay-verify="required" placeholder="请选择标签"
+                   style="width:380px;" id="labelTitle"
+                   aria-required="true" autocomplete="off" class="layui-input" readonly/>
+            <input type="hidden" name="labelId" id="labelId"/>
+        </div>
+        <div class="layui-inline">
+            <span id="labelBtn" style="cursor:pointer" class="layui-btn"><i class="layui-icon">&#xe681;
+            </i>选择
+            </span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">作者</label>
+        <div class="layui-input-block">
+            <input type="text" name="author" required lay-verify="required" placeholder="请输入作者"
+                   aria-required="true" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">出版社</label>
+        <div class="layui-input-block">
+            <input type="text" name="publish" required lay-verify="required" placeholder="请输入出版社"
+                   aria-required="true" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">档案文件</label>
+        <div class="layui-inline">
+            <input type="text" name="fileUrl" placeholder="请上传档案文件"
+                   style="width:380px;"
+                   aria-required="true" autocomplete="off" class="layui-input" readonly id="fileUrl">
+        </div>
+        <div class="layui-inline">
+            <span id="upfile" style="cursor:pointer" class="layui-btn"><i class="layui-icon">&#xe681;
+            </i>上传
+            </span>
+        </div>
+
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block">
+            <textarea name="note" placeholder="请输入备注"
+                      aria-required="true" autocomplete="off" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <input type="hidden" name="id" id="id" value="0"/>
+    <input type="hidden" name="actionUrl" id="actionUrl" value=""/>
+    <input type="hidden" name="status"/>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="recordForm">确定</button>
+            <button type="reset" class="layui-btn layui-btn-primary" onclick="layer.closeAll()">取消</button>
+        </div>
+    </div>
+</form>
+    #include("/templates/webAdmin/inc/inc_foot.vm")
+
+
+<script type="text/html" id="statusTemplet">
+    {{#
+    if(d.status == 1)
+    {
+    }}
+    <font color="green">正常</font>
+    {{#
+    }
+    else
+    {
+    }}
+    <font color="red">外借</font>
+    {{#
+    }
+    }}
+</script>
+<script type="text/html" id="fileUrlTemplet">
+    {{#
+        if(d.fileUrl)
+        {
+    }}
+    <a href="/static{{ d.fileUrl}}" target="_blank"><i class="layui-icon">&#xe61e;</i></a>
+    {{#
+        }
+    }}
+</script>
+<script type="text/javascript">
+    layui.use(['element', 'table', 'layer', 'upload', 'form'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var upload = layui.upload;
+        var form = layui.form;
+        var table = layui.table;
+        // 文件上传
+        upload.render({
+            elem: '#upfile'
+            , size: 6000 //限制文件大小，单位 KB
+            , exts: 'doc|docx|pdf' //只允许上传doc和docx  //如果不需要,是任意文件,请删除这一行
+            , url: '/system/fileupload?uploadFilePath=record&sessionId=' + new Date().getTime()
+            , accept: 'file'
+            , done: function (res, index, upload) {
+                if (res.success)
+                {
+                    $("#fileUrl").val(res.data.fileUrl);
+                }
+                else {
+                    layer.alert(res.message);
+                }
+            }
+        });
+        var recordTable = table.render({
+            elem: '#recordTable'
+            , id: 'recordTable'
+            , url: '/webAdmin/record/list'
+            , cols: [[
+                {checkbox: true, fixed: true}
+                , {field: 'id', title: 'ID', width: 80, sort: true, fixed: true}
+                , {field: 'title', title: '档案名', width: 200, sort: true, fixed: true}
+                , {field: 'labelTitle', title: '标签', width: 200, sort: true}
+                , {field: 'typeTitle', title: '类型', width: 200, sort: true}
+                , {field: 'author', title: '作者', width: 200, sort: true}
+                , {field: 'publish', title: '出版单位', width: 200, sort: true}
+                , {field: 'fileUrl', title: '文件', width: 80, sort: true, templet: '#fileUrlTemplet'}
+                , {field: 'status', title: '状态', width: 200, sort: true, templet: '#statusTemplet'}
+                , {field: 'note', title: '备注', width: 400, sort: true}
+                , {field: 'createName', title: '创建人', width: 120, sort: true}
+                , {field: 'createDate', title: '创建时间', width: 120, sort: true}
+            ]]
+            , height: 'full-200'
+            , limit: 40
+            , page: true
+        });
+        // 类型选择
+        $('#typeBtn').on('click', function () {
+            layer.open({
+                id: 'typeSelectWindow',
+                type: 2,
+                anim: 5,
+                shade: .2,
+                title: '档案类型选择',
+                btn: ['确定', '取消'],
+                area: ['800px', '600px'],
+                resize: false,
+                content: "/popu/type/toSelect?sessionId=" + new Date().getTime(),
+                yes: function (index, layero) {
+                    var data = document.returnValue;
+                    if (data)
+                    {
+                        $('#typeTitle').val(data.title);
+                        $('#typeId').val(data.id);
+                    }
+                    layer.close(index);
+                    document.returnValue = null;
+                },
+                cancel: function (index, layero) {
+                    layer.close(index);
+                    return false;
+                }
+            });
+        });
+        // 标签选择
+        $('#labelBtn').on('click', function () {
+            layer.open({
+                id: 'labelSelectWindow',
+                type: 2,
+                anim: 5,
+                shade: .2,
+                title: '档案标签选择',
+                btn: ['确定', '取消'],
+                area: ['800px', '600px'],
+                resize: false,
+                content: "/popu/label/toSelect?sessionId=" + new Date().getTime(),
+                yes: function (index, layero) {
+                    var data = document.returnValue;
+                    if (data)
+                    {
+                        $('#labelTitle').val(data.title);
+                        $('#labelId').val(data.id);
+                    }
+                    layer.close(index);
+                    document.returnValue = null;
+                },
+                cancel: function (index, layero) {
+                    layer.close(index);
+                    return false;
+                }
+            });
+        });
+        //触发事件
+        var active = {
+            search: function () {
+                var keyValue = $('#searchKey').val();
+                recordTable.reload({where: {key: keyValue}});
+            }
+            , new: function () {
+                $('#recordForm')[0].reset();
+                $('#actionUrl').val("new");
+                $('#id').val('0');
+                layer.open({
+                    type: 1
+                    , title: "新建"
+                    , closeBtn: 1
+                    , area: '650px;'
+                    , shade: 0.2
+                    , id: 'recordFormWindow'
+                    , moveType: 1
+                    , resize: false
+                    , content: $('#recordForm')
+                });
+            }
+            , modify: function () {
+                var checkStatus = table.checkStatus('recordTable'), data = checkStatus.data;
+                if (data.length < 1) {
+                    layer.msg('您必须选中一条需要修改的记录');
+                    return false;
+                }
+                else if (data.length > 1) {
+                    layer.msg('您在修改的时候,不能选中多条记录');
+                    return false;
+                }
+                else if (data[0].isPublic == '1')
+                {
+                    layer.msg('当前数据已经启用,不能修改');
+                    return false;
+                }
+                else {
+                    var id = data[0].id;
+                    $.ajax({
+                        type: 'get',
+                        url: '/webAdmin/record/info?id=' + id + '&sessionId=' + new Date().getTime(),
+                        success: function (json) {
+                            if (json.success) {
+                                console.log(json.data);
+                                form.loadData(json.data, 'recordForm');
+                                $('#actionUrl').val("modify");
+                                form.render();
+                                layer.open({
+                                    type: 1
+                                    , title: "修改"
+                                    , closeBtn: 1
+                                    , area: '650px;'
+                                    , shade: 0.2
+                                    , id: 'recordFormWindow'
+                                    , moveType: 1
+                                    , resize: false
+                                    , content: $('#recordForm')
+                                    , success: function (layero) {
+                                    }
+                                });
+                            }
+                            else {
+                                layer.msg(json.message);
+                            }
+                        },
+                        error: function (json) {
+                            layer.alert("未知的错误！", {closeBtn: 0}, function () {
+                                layer.closeAll();
+                            });
+                        }
+                    });
+                }
+            }
+            , delete: function () {
+                var checkStatus = table.checkStatus('recordTable'), data = checkStatus.data;
+                if (data.length < 1) {
+                    layer.msg('您必须最少选中一条需要删除的记录');
+                    return false;
+                }
+                layer.open({
+                    type: 1
+                    , id: 'recordDeleteAccept'
+                    , content: '<div style="padding: 20px 30px;">是否真的要删除选中的记录?</div>'
+                    , btn: ['确定', '取消']
+                    , btnAlign: 'c'
+                    , shade: 0.2
+                    , resize: false
+                    , yes: function () {
+                        layer.closeAll();
+                        var idArray = new Array();
+                        for (var i = 0; i < data.length; i++) {
+                            idArray[i] = data[i].id;
+                        }
+                        $.ajax({
+                            type: 'post',
+                            data: {ids: idArray.toString()},
+                            url: '/webAdmin/record/delete',
+                            success: function (json) {
+                                if (json.success) {
+                                    layer.alert(json.message, {closeBtn: 0}, function () {
+                                        layer.closeAll();
+                                        recordTable.reload();
+                                    });
+                                }
+                                else {
+                                    layer.alert(json.message);
+                                }
+                            },
+                            error: function (json) {
+                                layer.alert("登录超时,请重新登录！", {closeBtn: 0}, function () {
+                                    layer.closeAll();
+                                    window.location.reload();
+                                });
+                            }
+                        });
+                        return false;
+                    }
+                });
+            }
+        };
+        //总体上调用,是那个按钮激活哪个
+        $('#recordMenuBar .layui-btn').on('click', function () {
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+        });
+        //form submit新建修改事件提交
+        form.on('submit(recordForm)', function (data) {
+            var actionUrl = "/webAdmin/record/" + $('#actionUrl').val();
+            $.ajax({
+                type: 'post',
+                data: $('#recordForm').serialize(),
+                url: actionUrl,
+                success: function (json) {
+                    if (json.success) {
+                        layer.alert(json.message, {closeBtn: 0}, function () {
+                            layer.closeAll();
+                            recordTable.reload();
+                        });
+                    }
+                    else {
+                        layer.alert(json.message);
+                    }
+                },
+                error: function (json) {
+                    layer.alert("登录超时,请重新登录！", {closeBtn: 0}, function () {
+                        layer.closeAll();
+                        window.location.reload();
+                    });
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>

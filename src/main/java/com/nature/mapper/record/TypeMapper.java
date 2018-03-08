@@ -69,4 +69,12 @@ public interface TypeMapper extends MyMapper<Type>
      * @return
      */
     public int use(@Param(value = "ids") String[] ids);
+
+
+    /**
+     *  获取已启用列表信息
+     * @param key
+     * @return
+     */
+    public List<Type> listForPublic(@Param(value = "key") String key);
 }

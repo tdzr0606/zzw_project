@@ -29,14 +29,4 @@ public class CustomerWebConfiguerAdapter extends WebMvcConfigurerAdapter
         registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/webAdmin/**");
     }
 
-    /**
-     * 添加资源拦截器
-     *
-     * @param registry
-     */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry)
-    {
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-    }
 }

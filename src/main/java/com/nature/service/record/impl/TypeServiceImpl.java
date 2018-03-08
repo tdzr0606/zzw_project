@@ -70,4 +70,17 @@ public class TypeServiceImpl implements TypeService
     {
         return typeMapper.use(ids) > 0;
     }
+
+    @Override
+    public Page<Type> listPublicForPage(Integer nowPage, Integer pageSize, String key)
+    {
+        return new Page<>(PageHelper.startPage(nowPage, pageSize).doSelectPageInfo(new ISelect()
+        {
+            @Override
+            public void doSelect()
+            {
+                typeMapper.listForPublic(key);
+            }
+        }));
+    }
 }

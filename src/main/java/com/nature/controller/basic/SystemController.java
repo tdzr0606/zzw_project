@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * springboot
  * FileUploadController
@@ -25,21 +28,47 @@ public class SystemController extends BaseController
 {
 
     @Value("${web.upload-path}")
-    private String uploadPath;
+    private String uploadRootPath;
+
 
     /**
      * 文件上传
      *
-     * @return
+     * @param file     the upload file
+     * @param uploadFilePath the upload file path
+     * @param requestType    the request type
+     * @return common result
+     * @author:竺志伟
+     * @date :2018-03-08 17:19:34
      */
     @RequestMapping("/fileupload")
     @ResponseBody
-    public CommonResult fileUpload(@RequestParam(name = "uploadFile", required = true) MultipartFile uploadFile,
-                                   @RequestParam(name = "uploadFilePath", required = true) String uploadFilePath)
+    public CommonResult fileUpload(@RequestParam(name = "file", required = true) MultipartFile file,
+                                   @RequestParam(name = "uploadFilePath", required = true) String uploadFilePath,
+                                   @RequestParam(value = "requestType", required = false) String requestType)
     {
-        String fileName = FileUploadDownUtil.uploadFile(uploadPath, uploadFilePath, uploadFile);
-        return resultSuccessWrapper("文件上传成功", uploadFilePath + "/" + fileName);
+        return FileUploadDownUtil.uploadFile(uploadRootPath, uploadFilePath,requestType, file);
     }
 
+
+    /**
+     * 图片上传
+     * Img upload common result.
+     *
+     * @param file     the upload file
+     * @param uploadFilePath the upload file path
+     * @param requestType    the request type
+     * @return the common result
+     * @author:竺志伟
+     * @date :2018-03-08 17:19:37
+     */
+    @RequestMapping("/imgpload")
+    @ResponseBody
+    public CommonResult imgUpload(@RequestParam(name = "file", required = true) MultipartFile file,
+                                  @RequestParam(name = "uploadFilePath", required = true) String uploadFilePath,
+                                  @RequestParam(value = "requestType", required = false) String requestType)
+    {
+        return FileUploadDownUtil.uploadImg(uploadRootPath,uploadFilePath,requestType,file);
+    }
 
 }

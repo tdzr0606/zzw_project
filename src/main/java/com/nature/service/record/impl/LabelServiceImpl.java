@@ -70,4 +70,17 @@ public class LabelServiceImpl implements LabelService
     {
         return labelMapper.use(ids) > 0;
     }
+
+    @Override
+    public Page<Label> listForPublicPage(Integer nowPage, Integer pageSize, String key)
+    {
+        return new Page<>(PageHelper.startPage(nowPage, pageSize).doSelectPageInfo(new ISelect()
+        {
+            @Override
+            public void doSelect()
+            {
+                labelMapper.listForPublic(key);
+            }
+        }));
+    }
 }

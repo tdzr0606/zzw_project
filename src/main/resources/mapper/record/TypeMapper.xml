@@ -15,7 +15,7 @@
         <where>
             <if test="key != null">
                 title like concat(concat('%',#{key}),'%')
-                or  note like concat(concat('%',#{key}),'%')
+                or note like concat(concat('%',#{key}),'%')
             </if>
         </where>
         order by id desc
@@ -58,11 +58,25 @@
 
     <!-- 启用、禁用 -->
     <update id="use" parameterType="java.util.Arrays">
-        update record_type set isPublic  = (isPublic+1)%2 where id in
+        update record_type set isPublic = (isPublic+1)%2 where id in
         <foreach collection="ids" item="item" index="index" open="(" separator="," close=")">
             ${item}
         </foreach>
     </update>
 
+
+    <!-- 查询所有数据 -->
+    <select id="listForPublic" resultType="Type" parameterType="java.lang.String">
+        select
+        <include refid="basicColumn"/>
+        from record_type where isPublic = 1
+        <if test="key != null">
+            and
+            ( title like concat(concat('%',#{key}),'%')
+            or note like concat(concat('%',#{key}),'%')
+            )
+        </if>
+        order by id desc
+    </select>
 
 </mapper>

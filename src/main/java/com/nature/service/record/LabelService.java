@@ -23,4 +23,6 @@ public interface LabelService
     public void deleteByIds(String[] ids);
 
     public boolean use(String[] ids);
+
+    public Page<Label> listForPublicPage(Integer nowPage, Integer pageSize, String key);
 }
