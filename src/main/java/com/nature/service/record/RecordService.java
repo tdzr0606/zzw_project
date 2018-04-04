@@ -1,7 +1,10 @@
 package com.nature.service.record;
 
 import com.nature.pojo.record.Record;
+import com.nature.pojo.system.Admin;
 import com.nature.util.Page;
+
+import java.util.Map;
 
 /**
  * zzw_project
@@ -21,4 +24,8 @@ public interface RecordService
     public boolean deleteById(Integer id);
 
     public void deleteByIds(String[] ids);
+
+    public Page<Record> listForPageForNormal(Integer nowPage, Integer pageSize, String key);
+
+    public boolean modifyStatus(int id ,int status);
 }

@@ -9,6 +9,9 @@ import com.nature.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * zzw_project
  * RecordServiceImpl
@@ -31,6 +34,19 @@ public class RecordServiceImpl implements RecordService
             public void doSelect()
             {
                 recordMapper.list(key);
+            }
+        }));
+    }
+
+    @Override
+    public Page<Record> listForPageForNormal(Integer nowPage, Integer pageSize, String key)
+    {
+        return new Page<>(PageHelper.startPage(nowPage, pageSize).doSelectPageInfo(new ISelect()
+        {
+            @Override
+            public void doSelect()
+            {
+                recordMapper.listForNormal(key);
             }
         }));
     }
@@ -63,5 +79,14 @@ public class RecordServiceImpl implements RecordService
     public void deleteByIds(String[] ids)
     {
         recordMapper.deleteByIds(ids);
+    }
+
+    @Override
+    public boolean modifyStatus(int id, int status)
+    {
+        Map<String, Integer> paramMap = new HashMap<>();
+        paramMap.put("id", id);
+        paramMap.put("status", status);
+        return recordMapper.modifyStatus(paramMap) == 1;
     }
 }

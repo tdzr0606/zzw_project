@@ -1,6 +1,7 @@
 package com.nature.mapper.record;
 
-import com.nature.pojo.record.Record;
+import com.nature.mybatis.config.MyMapper;
+import com.nature.pojo.record.Borrow;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -8,17 +9,21 @@ import java.util.Map;
 
 /**
  * zzw_project
- * Author: 竺志伟
- * Date:   2018-03-07 21:24
+ * BorrowMapper
+ *
+ * @Author: 竺志伟
+ * @Date: 2018-03-30 16:09
  */
-public interface RecordMapper
+public interface BorrowMapper extends MyMapper<Borrow>
 {
     /**
      * 查询所有数据
      *
      * @return
      */
-    public List<Record> list(@Param(value = "key") String key);
+    public List<Borrow> list(@Param(value = "key") String key);
+
+    public List<Borrow> listByBorrowId(Map<String,String> paramMap);
 
 
     /**
@@ -26,14 +31,14 @@ public interface RecordMapper
      *
      * @param obj
      */
-    public int add(Record obj);
+    public int add(Borrow obj);
 
     /**
      * 更新数据
      *
      * @param obj
      */
-    public int modify(Record obj);
+    public int modify(Borrow obj);
 
 
     /**
@@ -50,7 +55,7 @@ public interface RecordMapper
      * @param id
      * @return
      */
-    public Record findById(@Param(value = "id") Integer id);
+    public Borrow findById(@Param(value = "id") Integer id);
 
 
     /**
@@ -59,8 +64,4 @@ public interface RecordMapper
      * @param ids
      */
     public void deleteByIds(@Param(value = "ids") String[] ids);
-
-    public List<Record> listForNormal(@Param(value = "key") String key);
-
-    public int modifyStatus(Map<String,Integer> paramMap);
 }

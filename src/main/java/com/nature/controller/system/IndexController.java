@@ -86,9 +86,12 @@ public class IndexController extends BaseController
     /**
      * 后台登录
      *
-     * @param userName
-     * @param password
-     * @return
+     * @param loginName the login name
+     * @param password  the password
+     * @param loginCode the login code
+     * @return common result
+     * @author:竺志伟
+     * @date :2018-03-12 12:08:23
      */
     @RequestMapping(value = "/webAdmin/login")
     @ResponseBody

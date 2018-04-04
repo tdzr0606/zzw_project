@@ -2,8 +2,10 @@ package com.nature.controller.utils;
 
 import com.nature.controller.basic.BaseController;
 import com.nature.pojo.record.Label;
+import com.nature.pojo.record.Record;
 import com.nature.pojo.record.Type;
 import com.nature.service.record.LabelService;
+import com.nature.service.record.RecordService;
 import com.nature.service.record.TypeService;
 import com.nature.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class PopuController extends BaseController
     TypeService typeService;
     @Autowired
     LabelService labelService;
+    @Autowired
+    RecordService recordService;
 
 
     /**
@@ -101,5 +105,41 @@ public class PopuController extends BaseController
             @RequestParam(value = "key", required = false, defaultValue = "") String key)
     {
         return labelService.listForPublicPage(page,rows,key);
+    }
+
+    /**
+     * 进入 档案选择页面
+     * To borrow select page string.
+     *
+     * @return the string
+     * @author:竺志伟
+     * @date :2018-03-31 09:31:52
+     */
+    @RequestMapping(value = "/record/toSelect")
+    public String toRecordSelectPage()
+    {
+        return "/webAdmin/popu/recordSelect";
+    }
+
+
+    /**
+     * 查询 未外借的 档案信息
+     * List record for page page.
+     *
+     * @param rows the rows
+     * @param page the page
+     * @param key  the key
+     * @return the page
+     * @author:竺志伟
+     * @date :2018-03-31 09:50:39
+     */
+    @RequestMapping(value = "/record/list")
+    @ResponseBody
+    public Page<Record> listRecordForPage(
+            @RequestParam(value = "rows", required = true, defaultValue = "40") Integer rows,
+            @RequestParam(value = "page", required = true, defaultValue = "1") Integer page,
+            @RequestParam(value = "key", required = false, defaultValue = "") String key)
+    {
+        return recordService.listForPageForNormal(page,rows,key);
     }
 }

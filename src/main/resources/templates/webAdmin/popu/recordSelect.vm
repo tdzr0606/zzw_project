@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+    #include("/templates/webAdmin/inc/inc_header.vm")
+<body>
+
+<div class="layui-form-item" style="padding:5px 20px 0px 0px;">
+    <label class="layui-form-label" style="width:150px;">选中档案信息:</label>
+    <div class="layui-input-inline" style="width: 400px;">
+        <input type="text" id="selectValue" class="layui-input" autocomplete="off"
+               readonly="readonly"
+               placeholder="请在下方搜索并选择档案信息">
+    </div>
+</div>
+<hr/>
+<div class="layui-row" style="padding-right: 20px;padding-top: 10px;">
+    <table align="right">
+        <tr>
+            <td style="padding-right:10px">搜索:</td>
+            <td><input class="layui-input" style="height:30px;width:300px;float:right" name="key" id="searchKey" autocomplete="off"></td>
+            <td style="padding-left:10px"><button class="layui-btn layui-btn-sm" data-method="search" type="button" id="searchBtn" style="float:right">搜索</button></td>
+        </tr>
+    </table>
+</div>
+<div class="table-cont">
+    <table class="layui-table" id="recordSelectTable" lay-filter="recordSelectTable"></table>
+</div>
+<script src="/static/design/js/jquery-3.2.1.min.js"></script>
+<script src="/static/design/js/ch233.min.js"></script>
+<script src="/static/design/js/md5.js"></script>
+<script src="/static/design/layui.js"></script>
+
+<script type="text/html" id="fileUrlTemplet">
+    {{#
+    if(d.fileUrl)
+    {
+    }}
+    <a href="/static{{ d.fileUrl}}" target="_blank"><i class="layui-icon">&#xe61e;</i></a>
+    {{#
+    }
+    }}
+</script>
+<script type="text/javascript">
+    layui.use(['element', 'table', 'layer'], function () {
+        var $ = layui.jquery;
+        var table = layui.table;
+        var layer = layui.layer;
+        var recordSelectTable = table.render({
+            elem: '#recordSelectTable'
+            , id: 'recordSelectTable'
+            , url: '/popu/record/list'
+            , cols: [[
+                {checkbox: true, fixed: true}
+                , {field: 'id', title: 'ID', width: 80, sort: true, fixed: true}
+                , {field: 'title', title: '档案名', width: 200, sort: true, fixed: true}
+                , {field: 'labelTitle', title: '标签', width: 200, sort: true}
+                , {field: 'typeTitle', title: '类型', width: 200, sort: true}
+                , {field: 'author', title: '作者', width: 200, sort: true}
+                , {field: 'publish', title: '出版单位', width: 200, sort: true}
+                , {field: 'fileUrl', title: '文件', width: 80, sort: true, templet: '#fileUrlTemplet'}
+                , {field: 'note', title: '备注', width: 400, sort: true}
+            ]]
+            , height: '360'
+            , limit: 40
+            , page: true
+        });
+
+        table.on('checkbox(recordSelectTable)', function (obj) {
+            $('#selectValue').val(obj.data.title);
+            window.parent.document.returnValue = obj.data;
+        });
+
+
+        $('#searchBtn').on('click',function () {
+            var keyValue = $('#searchKey').val();
+            recordSelectTable.reload({where: {key: keyValue}});
+        });
+    });
+</script>
+
+</body>
+</html>

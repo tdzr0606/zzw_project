@@ -75,7 +75,7 @@ public class FunctionController extends BaseController
                 }
             }
         }
-        return new Page<>(1,999,1,999,resultList);
+        return new Page<>(1,resultList.size(),1,999,resultList);
     }
 
 
