@@ -2,6 +2,7 @@ package com.nature.mapper.record;
 
 import com.nature.mybatis.config.MyMapper;
 import com.nature.pojo.record.Borrow;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

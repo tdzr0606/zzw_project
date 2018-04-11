@@ -122,7 +122,7 @@
             , cols: [[
                 {checkbox: true, fixed: true}
                 , {field: 'id', title: 'ID', width: 80, sort: true, fixed: true}
-                , {field: 'title', title: '标签名', width: 300, sort: true}
+                , {field: 'title', title: '类型名', width: 300, sort: true}
                 , {field: 'note', title: '备注', width: 400, sort: true}
                 , {field: 'isPublic', title: '状态', width: 80, sort: true,templet:'#isPublic'}
             ]]
