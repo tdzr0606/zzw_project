@@ -56,8 +56,9 @@
 
         <!--数据源连接池-->
         <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.9</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
